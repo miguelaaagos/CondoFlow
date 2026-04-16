@@ -1,0 +1,56 @@
+{% extends 'movies/fragments/base.html' %}
+{% block main-content %}
+<div class="row">
+    <div class="col s12">
+        <h5>Unidades del condominio</h5>
+        {% if request.user.is_staff %}
+        <a class="btn waves-effect light-blue darken-2 right" href="{% url 'movies:unidad-create' %}">
+            <i class="material-icons left">add</i>Nueva unidad
+        </a>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col s12">
+        {% if not unidades %}
+            <div class="card-panel orange">
+                <span class="white-text">No hay unidades registradas.</span>
+            </div>
+        {% else %}
+            <table class="striped responsive-table">
+                <thead>
+                <tr>
+                    <th>Depto</th>
+                    <th>Bloque</th>
+                    <th>Propietario</th>
+                    <th>Usuario residente</th>
+                    <th>Registrada</th>
+                    {% if request.user.is_staff %}<th>Opciones</th>{% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for unidad in unidades %}
+                    <tr>
+                        <td><b>{{ unidad.numero }}</b></td>
+                        <td>{{ unidad.bloque }}</td>
+                        <td>{{ unidad.propietario }}</td>
+                        <td>{{ unidad.usuario.username|default:"Sin asignar" }}</td>
+                        <td>{{ unidad.created|timesince }} atras</td>
+                        {% if request.user.is_staff %}
+                        <td>
+                            <a class="btn-floating btn-small waves-effect orange" href="{{ unidad.get_edit_url }}">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            <a class="btn-floating btn-small waves-effect red" href="{{ unidad.get_delete_url }}">
+                                <i class="material-icons">delete</i>
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

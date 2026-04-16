@@ -1,0 +1,52 @@
+{% extends 'movies/fragments/base.html' %}
+{% block main-content %}
+    <div class="row">
+        <div class="col s12">
+            <h4>Reservas de areas comunes</h4>
+            <a class="waves-effect waves-light btn right light-blue darken-1" href="{% url 'movies:reserva-create' %}">
+                <i class="material-icons left">add</i>Nueva reserva
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            {% if not reservas %}
+                <div class="card-panel orange">
+                    <span class="white-text">No hay reservas registradas actualmente</span>
+                </div>
+            {% else %}
+                <table class="striped centered">
+                    <thead>
+                    <tr>
+                        <th>Descripcion</th>
+                        <th>Unidad</th>
+                        <th>Area comun</th>
+                        <th>Fecha</th>
+                        <th>Hora inicio</th>
+                        <th>Hora fin</th>
+                        <th>Opciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for reserva in reservas %}
+                        <tr>
+                            <td>{{ reserva.name }}</td>
+                            <td>{{ reserva.unidad }}</td>
+                            <td>{{ reserva.get_amenidad_display }}</td>
+                            <td>{{ reserva.fecha_reserva }}</td>
+                            <td>{{ reserva.hora_inicio }}</td>
+                            <td>{{ reserva.hora_fin }}</td>
+                            <td>
+                                <a class="btn-floating btn-small waves-effect waves-light blue"
+                                   href="{{ reserva.get_delete_url }}">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

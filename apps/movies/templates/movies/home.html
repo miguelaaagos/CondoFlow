@@ -1,0 +1,211 @@
+{% extends 'movies/fragments/base.html' %}
+{% block main-content %}
+
+{% if es_admin %}
+<h5 class="light-blue-text darken-2">Panel de Administracion</h5>
+
+<div class="row">
+    <div class="col s12 m3">
+        <div class="card green darken-1 stat-card">
+            <span class="white-text stat-texto">Recaudado este mes</span>
+            <div class="stat-number white-text">${{ total_recaudado|floatformat:0 }}</div>
+        </div>
+    </div>
+    <div class="col s12 m3">
+        <a href="{% url 'movies:pago-list' %}?estado=pendiente" class="card orange darken-1 stat-card">
+            <span class="white-text stat-texto">Pagos pendientes</span>
+            <div class="stat-number white-text">{{ pagos_pendientes }}</div>
+        </a>
+    </div>
+    <div class="col s12 m3">
+        <a href="{% url 'movies:pago-list' %}?estado=vencido" class="card red darken-1 stat-card">
+            <span class="white-text stat-texto">Pagos vencidos</span>
+            <div class="stat-number white-text">{{ pagos_vencidos }}</div>
+        </a>
+    </div>
+    <div class="col s12 m3">
+        <a href="{% url 'movies:unidad-list' %}" class="card light-blue darken-2 stat-card">
+            <span class="white-text stat-texto">Total unidades</span>
+            <div class="stat-number white-text">{{ total_unidades }}</div>
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m7">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Ultimos pagos registrados</span>
+                {% if ultimos_pagos %}
+                <table class="striped">
+                    <thead><tr><th>Concepto</th><th>Unidad</th><th>Monto</th><th>Estado</th></tr></thead>
+                    <tbody>
+                    {% for pago in ultimos_pagos %}
+                    <tr>
+                        <td>{{ pago.name }}</td>
+                        <td>{{ pago.unidad.numero }} - {{ pago.unidad.bloque }}</td>
+                        <td>${{ pago.monto|floatformat:0 }}</td>
+                        <td><span class="badge-estado-{{ pago.estado }}">{{ pago.get_estado_display }}</span></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="grey-text">Sin pagos registrados.</p>
+                {% endif %}
+            </div>
+            <div class="card-action">
+                <a href="{% url 'movies:pago-list' %}">Ver todos los pagos</a>
+                <a href="{% url 'movies:pago-create' %}">Registrar pago</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col s12 m5">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Proximas reservas</span>
+                {% if proximas_reservas %}
+                <ul class="collection">
+                {% for r in proximas_reservas %}
+                    <li class="collection-item">
+                        <b>{{ r.get_amenidad_display }}</b><br>
+                        <small>{{ r.unidad.numero }} &bull; {{ r.fecha_reserva }} &bull; {{ r.hora_inicio|time:"H:i" }}-{{ r.hora_fin|time:"H:i" }}</small>
+                    </li>
+                {% endfor %}
+                </ul>
+                {% else %}
+                <p class="grey-text">Sin reservas proximas.</p>
+                {% endif %}
+            </div>
+            <div class="card-action">
+                <a href="{% url 'movies:reserva-list' %}">Ver todas</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if anuncios %}
+<div class="row">
+    <div class="col s12">
+        <h6 class="grey-text">Anuncios recientes</h6>
+        {% for anuncio in anuncios %}
+        <div class="card-panel {% if anuncio.destacado %}amber lighten-4{% else %}white{% endif %}">
+            {% if anuncio.destacado %}<i class="material-icons orange-text left">star</i>{% endif %}
+            <b>{{ anuncio.name }}</b>
+            <p>{{ anuncio.contenido|truncatechars:120 }}</p>
+            <small class="grey-text">{{ anuncio.created|timesince }} atras</small>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<h5 class="light-blue-text darken-2">Bienvenido, {{ request.user.get_full_name|default:request.user.username }}</h5>
+
+{% if unidad %}
+<div class="row">
+    <div class="col s12 m5">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Tu unidad</span>
+                <p><b>Edificio:</b> {{ unidad.bloque }}</p>
+                <p><b>Departamento:</b> {{ unidad.numero }}</p>
+                <hr>
+                <span class="card-title">Pago del mes actual</span>
+                {% if pago_mes %}
+                    <p>{{ pago_mes.name }}</p>
+                    <p><b>Monto:</b> ${{ pago_mes.monto|floatformat:0 }}</p>
+                    <span class="badge-estado-{{ pago_mes.estado }}">{{ pago_mes.get_estado_display }}</span>
+                {% else %}
+                    <p class="orange-text">No hay pago registrado para este mes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col s12 m7">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Mis pagos recientes</span>
+                {% if mis_pagos %}
+                <table class="striped">
+                    <thead><tr><th>Concepto</th><th>Fecha</th><th>Monto</th><th>Estado</th></tr></thead>
+                    <tbody>
+                    {% for pago in mis_pagos %}
+                    <tr>
+                        <td>{{ pago.name }}</td>
+                        <td>{{ pago.fecha_pago }}</td>
+                        <td>${{ pago.monto|floatformat:0 }}</td>
+                        <td><span class="badge-estado-{{ pago.estado }}">{{ pago.get_estado_display }}</span></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="grey-text">Sin pagos registrados.</p>
+                {% endif %}
+            </div>
+            <div class="card-action">
+                <a href="{% url 'movies:pago-list' %}">Ver todos mis pagos</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 m6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Mis proximas reservas</span>
+                {% if mis_reservas %}
+                <ul class="collection">
+                {% for r in mis_reservas %}
+                    <li class="collection-item">
+                        <b>{{ r.get_amenidad_display }}</b><br>
+                        <small>{{ r.fecha_reserva }} &bull; {{ r.hora_inicio|time:"H:i" }} - {{ r.hora_fin|time:"H:i" }}</small>
+                    </li>
+                {% endfor %}
+                </ul>
+                {% else %}
+                <p class="grey-text">Sin reservas proximas.</p>
+                {% endif %}
+            </div>
+            <div class="card-action">
+                <a href="{% url 'movies:reserva-create' %}">Nueva reserva</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col s12 m6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Anuncios de la administracion</span>
+                {% if anuncios %}
+                {% for anuncio in anuncios %}
+                <div class="{% if anuncio.destacado %}orange-text{% endif %}">
+                    {% if anuncio.destacado %}<i class="material-icons tiny">star</i>{% endif %}
+                    <b>{{ anuncio.name }}</b>
+                    <p>{{ anuncio.contenido|truncatechars:100 }}</p>
+                    <small class="grey-text">{{ anuncio.created|timesince }} atras</small>
+                    <hr>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="grey-text">Sin anuncios recientes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="card-panel orange">
+    <span class="white-text">Tu usuario no tiene una unidad asignada. Contacta al administrador.</span>
+</div>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'movies/fragments/base.html' %}
+{% block main-content %}
+<div class="row">
+    <div class="col s12">
+        <h5>Pagos de gastos comunes</h5>
+    </div>
+</div>
+
+<!-- Filtros por estado -->
+<div class="row">
+    <div class="col s12">
+        <a href="{% url 'movies:pago-list' %}" class="btn btn-small {% if not estado_filtro %}light-blue darken-2{% else %}grey{% endif %} waves-effect">Todos</a>
+        <a href="{% url 'movies:pago-list' %}?estado=pagado" class="btn btn-small {% if estado_filtro == 'pagado' %}green darken-1{% else %}grey{% endif %} waves-effect">Pagados</a>
+        <a href="{% url 'movies:pago-list' %}?estado=pendiente" class="btn btn-small {% if estado_filtro == 'pendiente' %}orange darken-1{% else %}grey{% endif %} waves-effect">Pendientes</a>
+        <a href="{% url 'movies:pago-list' %}?estado=vencido" class="btn btn-small {% if estado_filtro == 'vencido' %}red darken-1{% else %}grey{% endif %} waves-effect">Vencidos</a>
+        {% if request.user.is_staff %}
+        <a href="{% url 'movies:pago-create' %}" class="btn btn-small light-blue darken-2 waves-effect right">
+            <i class="material-icons left">add</i>Registrar pago
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12">
+        {% if not pagos %}
+            <div class="card-panel blue-grey lighten-4">
+                <span class="grey-text">No hay pagos con el filtro seleccionado.</span>
+            </div>
+        {% else %}
+            <table class="striped responsive-table">
+                <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Unidad</th>
+                    {% if request.user.is_staff %}<th>Bloque</th>{% endif %}
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for pago in pagos %}
+                    <tr>
+                        <td>{{ pago.name }}</td>
+                        <td>{{ pago.unidad.numero }}</td>
+                        {% if request.user.is_staff %}<td>{{ pago.unidad.bloque }}</td>{% endif %}
+                        <td>${{ pago.monto|floatformat:0 }}</td>
+                        <td>{{ pago.fecha_pago }}</td>
+                        <td><span class="badge-estado-{{ pago.estado }}">{{ pago.get_estado_display }}</span></td>
+                        <td>
+                            {% if request.user.is_staff %}
+                            <a class="btn-floating btn-small waves-effect orange" href="{{ pago.get_edit_url }}">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            <a class="btn-floating btn-small waves-effect red" href="{{ pago.get_delete_url }}">
+                                <i class="material-icons">delete</i>
+                            </a>
+                            {% endif %}
+                            <a class="btn-floating btn-small waves-effect light-blue" href="{{ pago.get_detail_url }}">
+                                <i class="material-icons">visibility</i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

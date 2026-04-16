@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CondoFlow</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="{% static 'movies/estilos.css' %}">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+<body>
+<nav class="light-blue darken-2" role="navigation">
+    <div class="nav-wrapper container">
+        <a href="{% url 'movies:home' %}" class="brand-logo">CondoFlow</a>
+        {% if request.user.is_authenticated %}
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'movies:home' %}"><i class="material-icons left">dashboard</i>Inicio</a></li>
+                <li><a href="{% url 'movies:pago-list' %}"><i class="material-icons left">payment</i>Pagos</a></li>
+                <li><a href="{% url 'movies:reserva-list' %}"><i class="material-icons left">event</i>Reservas</a></li>
+                <li><a href="{% url 'movies:anuncio-list' %}"><i class="material-icons left">announcement</i>Anuncios</a></li>
+                {% if request.user.is_staff %}
+                <li><a href="{% url 'movies:unidad-list' %}"><i class="material-icons left">home</i>Unidades</a></li>
+                {% endif %}
+                <li><a href="{% url 'movies:log-out' %}"><i class="material-icons left">exit_to_app</i>Salir</a></li>
+            </ul>
+            <ul id="nav-mobile" class="side-nav">
+                <li class="user-view">
+                    <div class="background light-blue darken-3"></div>
+                    <span class="white-text name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="white-text email">{% if request.user.is_staff %}Administrador{% else %}Residente{% endif %}</span>
+                </li>
+                <li><a href="{% url 'movies:home' %}"><i class="material-icons">dashboard</i>Inicio</a></li>
+                <li><a href="{% url 'movies:pago-list' %}"><i class="material-icons">payment</i>Pagos</a></li>
+                <li><a href="{% url 'movies:reserva-list' %}"><i class="material-icons">event</i>Reservas</a></li>
+                <li><a href="{% url 'movies:anuncio-list' %}"><i class="material-icons">announcement</i>Anuncios</a></li>
+                {% if request.user.is_staff %}
+                <li><a href="{% url 'movies:unidad-list' %}"><i class="material-icons">home</i>Unidades</a></li>
+                {% endif %}
+                <li><a href="{% url 'movies:log-out' %}"><i class="material-icons">exit_to_app</i>Salir</a></li>
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container">
+    <div class="section">
+
+        {% if messages %}
+        {% for message in messages %}
+            <div class="card-panel {% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}orange{% endif %} darken-1" style="margin-top:12px">
+                <span class="white-text"><i class="material-icons left">{% if message.tags == 'success' %}check_circle{% elif message.tags == 'error' %}error{% else %}info{% endif %}</i>{{ message }}</span>
+            </div>
+        {% endfor %}
+        {% endif %}
+
+        {% block main-content %}{% endblock %}
+    </div>
+    <br><br>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('select').material_select();
+        $('.button-collapse').sideNav();
+        $('.datepicker').pickadate({
+            selectMonths: true,
+            selectYears: 5,
+            today: 'Hoy',
+            clear: 'Limpiar',
+            close: 'Ok',
+            closeOnSelect: false,
+            format: 'yyyy-mm-dd'
+        });
+    });
+</script>
+</body>
+</html>

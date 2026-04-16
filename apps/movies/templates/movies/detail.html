@@ -1,0 +1,28 @@
+{% extends 'movies/fragments/base.html' %}
+{% block main-content %}
+    <div class="row">
+        <div class="col s8 offset-s2">
+            <div class="card">
+                {% if pago.comprobante %}
+                <div class="card-image">
+                    <img src="{{ pago.comprobante.url }}" class="img-comprobante">
+                </div>
+                {% endif %}
+                <div class="card-content">
+                    <span class="card-title">{{ pago.name }}</span>
+                    <p><b>Unidad:</b> {{ pago.unidad }}</p>
+                    <p><b>Monto:</b> ${{ pago.monto }}</p>
+                    <p><b>Fecha de pago:</b> {{ pago.fecha_pago }}</p>
+                    <p><b>Estado:</b> {{ pago.get_estado_display }}</p>
+                    <p><b>Registrado:</b> {{ pago.created }}</p>
+                    <p><b>Ultima actualizacion:</b> {{ pago.updated }}</p>
+                </div>
+                <div class="card-action">
+                    <a href="{{ pago.get_edit_url }}">Editar</a>
+                    <a href="{{ pago.get_delete_url }}">Eliminar</a>
+                    <a href="{% url 'movies:home' %}">Volver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
