@@ -16,6 +16,7 @@ pago_patterns = [
 reserva_patterns = [
     re_path(r'^$', views.reserva_list, name='reserva-list'),
     re_path(r'^crear/$', views.reserva_create, name='reserva-create'),
+    re_path(r'^(?P<pk>[0-9]+)/editar/$', views.reserva_update, name='reserva-edit'),
     re_path(r'^(?P<pk>[0-9]+)/eliminar/$', views.reserva_delete, name='reserva-delete'),
 ]
 
