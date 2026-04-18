@@ -247,6 +247,47 @@ def unidad_delete(request, **kwargs):
     })
 
 
+# Bloques
+
+@admin_required
+def bloque_list(request, **kwargs):
+    bloques = Bloque.objects.all()
+    return render(request, 'movies/bloque/bloque_list.html', {'bloques': bloques})
+
+
+@admin_required
+def bloque_create(request, **kwargs):
+    form = BloqueForm(request.POST or None)
+    if request.POST and form.is_valid():
+        form.save()
+        messages.success(request, 'Bloque creado correctamente.')
+        return redirect('movies:bloque-list')
+    return render(request, 'movies/form.html', {'form': form, 'titulo': 'Nuevo Bloque'})
+
+
+@admin_required
+def bloque_update(request, **kwargs):
+    bloque = Bloque.objects.get(pk=kwargs.get('pk'))
+    form = BloqueForm(request.POST or None, instance=bloque)
+    if request.POST and form.is_valid():
+        form.save()
+        messages.success(request, 'Bloque actualizado correctamente.')
+        return redirect('movies:bloque-list')
+    return render(request, 'movies/form.html', {'form': form, 'titulo': 'Editar Bloque'})
+
+
+@admin_required
+def bloque_delete(request, **kwargs):
+    bloque = Bloque.objects.get(pk=kwargs.get('pk'))
+    if request.POST:
+        bloque.delete()
+        messages.success(request, 'Bloque eliminado.')
+        return redirect('movies:bloque-list')
+    return render(request, 'movies/confirm_delete.html', {
+        'objeto': bloque, 'tipo': 'el bloque'
+    })
+
+
 # Anuncios
 
 @login_required
