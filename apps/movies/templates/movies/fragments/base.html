@@ -21,6 +21,7 @@
                 <li><a href="{% url 'movies:anuncio-list' %}"><i class="material-icons left">announcement</i>Anuncios</a></li>
                 {% if request.user.is_staff %}
                 <li><a href="{% url 'movies:unidad-list' %}"><i class="material-icons left">home</i>Unidades</a></li>
+                <li><a href="{% url 'movies:bloque-list' %}"><i class="material-icons left">apartment</i>Bloques</a></li>
                 {% endif %}
                 <li><a href="{% url 'movies:log-out' %}"><i class="material-icons left">exit_to_app</i>Salir</a></li>
             </ul>
@@ -36,6 +37,7 @@
                 <li><a href="{% url 'movies:anuncio-list' %}"><i class="material-icons">announcement</i>Anuncios</a></li>
                 {% if request.user.is_staff %}
                 <li><a href="{% url 'movies:unidad-list' %}"><i class="material-icons">home</i>Unidades</a></li>
+                <li><a href="{% url 'movies:bloque-list' %}"><i class="material-icons">apartment</i>Bloques</a></li>
                 {% endif %}
                 <li><a href="{% url 'movies:log-out' %}"><i class="material-icons">exit_to_app</i>Salir</a></li>
             </ul>

@@ -27,6 +27,13 @@ unidad_patterns = [
     re_path(r'^(?P<pk>[0-9]+)/eliminar/$', views.unidad_delete, name='unidad-delete'),
 ]
 
+bloque_patterns = [
+    re_path(r'^$', views.bloque_list, name='bloque-list'),
+    re_path(r'^crear/$', views.bloque_create, name='bloque-create'),
+    re_path(r'^(?P<pk>[0-9]+)/editar/$', views.bloque_update, name='bloque-edit'),
+    re_path(r'^(?P<pk>[0-9]+)/eliminar/$', views.bloque_delete, name='bloque-delete'),
+]
+
 anuncio_patterns = [
     re_path(r'^$', views.anuncio_list, name='anuncio-list'),
     re_path(r'^crear/$', views.anuncio_create, name='anuncio-create'),
@@ -41,5 +48,6 @@ urlpatterns = [
     re_path(r'^pagos/', include(pago_patterns)),
     re_path(r'^reservas/', include(reserva_patterns)),
     re_path(r'^unidades/', include(unidad_patterns)),
+    re_path(r'^bloques/', include(bloque_patterns)),
     re_path(r'^anuncios/', include(anuncio_patterns)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

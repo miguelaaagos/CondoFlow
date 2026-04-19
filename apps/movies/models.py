@@ -21,6 +21,13 @@ class Bloque(BaseName):
     class Meta:
         verbose_name = 'Bloque'
         verbose_name_plural = 'Bloques'
+        ordering = ['name']
+
+    def get_edit_url(self):
+        return reverse_lazy('movies:bloque-edit', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        return reverse_lazy('movies:bloque-delete', kwargs={'pk': self.pk})
 
 
 class Unidad(BaseName):
