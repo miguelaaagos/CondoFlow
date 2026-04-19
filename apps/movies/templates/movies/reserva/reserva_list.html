@@ -37,7 +37,11 @@
                             <td>{{ reserva.hora_inicio }}</td>
                             <td>{{ reserva.hora_fin }}</td>
                             <td>
-                                <a class="btn-floating btn-small waves-effect waves-light blue"
+                                <a class="btn-floating btn-small waves-effect orange"
+                                   href="{{ reserva.get_edit_url }}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                                <a class="btn-floating btn-small waves-effect red"
                                    href="{{ reserva.get_delete_url }}">
                                     <i class="material-icons">delete</i>
                                 </a>

@@ -94,6 +94,9 @@ class Reserva(BaseName):
         verbose_name_plural = 'Reservas'
         ordering = ['fecha_reserva']
 
+    def get_edit_url(self):
+        return reverse_lazy('movies:reserva-edit', kwargs={'pk': self.pk})
+
     def get_delete_url(self):
         return reverse_lazy('movies:reserva-delete', kwargs={'pk': self.pk})
 

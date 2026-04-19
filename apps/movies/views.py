@@ -195,6 +195,17 @@ def reserva_create(request, **kwargs):
 
 
 @login_required
+def reserva_update(request, **kwargs):
+    reserva = Reserva.objects.get(pk=kwargs.get('pk'))
+    form = ReservaForm(request.POST or None, instance=reserva)
+    if request.POST and form.is_valid():
+        form.save()
+        messages.success(request, 'Reserva actualizada correctamente.')
+        return redirect('movies:reserva-list')
+    return render(request, 'movies/form.html', {'form': form, 'titulo': 'Editar Reserva'})
+
+
+@login_required
 def reserva_delete(request, **kwargs):
     reserva = Reserva.objects.get(pk=kwargs.get('pk'))
     if request.POST:
