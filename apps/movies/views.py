@@ -28,7 +28,7 @@ def admin_required(view_func):
 
 def log_in(request):
     form = LoginForm(request.POST or None)
-    context = {'message': None, 'form': form}
+    context = {'message': None, 'form': form, 'btn_label': 'Ingresar'}
     if request.POST and form.is_valid():
         user = authenticate(**form.cleaned_data)
         if user is not None:
@@ -328,6 +328,14 @@ def anuncio_update(request, **kwargs):
         messages.success(request, 'Anuncio actualizado.')
         return redirect('movies:anuncio-list')
     return render(request, 'movies/form.html', {'form': form, 'titulo': 'Editar Anuncio'})
+
+
+@admin_required
+def anuncio_toggle_destacado(request, **kwargs):
+    anuncio = Anuncio.objects.get(pk=kwargs.get('pk'))
+    anuncio.destacado = not anuncio.destacado
+    anuncio.save()
+    return redirect('movies:anuncio-list')
 
 
 @admin_required

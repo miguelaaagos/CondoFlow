@@ -36,6 +36,9 @@
                 {% if request.user.is_staff %}
                 <div class="card-action">
                     <a href="{{ anuncio.get_edit_url }}">Editar</a>
+                    <a href="{% url 'movies:anuncio-destacar' anuncio.pk %}" class="orange-text">
+                        {% if anuncio.destacado %}Quitar destacado{% else %}Destacar{% endif %}
+                    </a>
                     <a href="{{ anuncio.get_delete_url }}" class="red-text">Eliminar</a>
                 </div>
                 {% endif %}

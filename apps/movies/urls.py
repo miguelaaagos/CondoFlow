@@ -39,6 +39,7 @@ anuncio_patterns = [
     re_path(r'^crear/$', views.anuncio_create, name='anuncio-create'),
     re_path(r'^(?P<pk>[0-9]+)/editar/$', views.anuncio_update, name='anuncio-edit'),
     re_path(r'^(?P<pk>[0-9]+)/eliminar/$', views.anuncio_delete, name='anuncio-delete'),
+    re_path(r'^(?P<pk>[0-9]+)/destacar/$', views.anuncio_toggle_destacado, name='anuncio-destacar'),
 ]
 
 urlpatterns = [

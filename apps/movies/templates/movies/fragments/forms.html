@@ -19,7 +19,7 @@
     {% endfor %}
 
     <div class="row">
-        <button class="btn waves-effect waves-light right light-blue darken-1" type="submit" name="action">Guardar
+        <button class="btn waves-effect waves-light right light-blue darken-1" type="submit" name="action">{{ btn_label|default:"Guardar" }}
             <i class="material-icons right">send</i>
         </button>
         <a class="btn waves-effect waves-light grey" href="javascript:history.back()">Cancelar</a>
